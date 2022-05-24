@@ -9,7 +9,9 @@ import Login from './pages/Login';
 import NotFound from './pages/Page404';
 import Register from './pages/Register';
 import Products from './pages/Products';
+import Wishlist from './pages/Wishlist';
 import DashboardApp from './pages/DashboardApp';
+import Order from './pages/Orders';
 
 // ----------------------------------------------------------------------
 
@@ -22,14 +24,16 @@ export default function Router() {
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
         { path: 'products', element: <Products /> },
+        { path: 'wishlist', element: <Wishlist /> },
         { path: 'blog', element: <Blog /> },
+        { path: 'orders', element: <Order /> },
       ],
     },
     {
       path: '/',
       element: <LogoOnlyLayout />,
       children: [
-        { path: '/', element: <Navigate to="/dashboard/app" /> },
+        { path: '/', element: <Navigate to="/login" /> },
         { path: 'login', element: <Login /> },
         { path: 'register', element: <Register /> },
         { path: '404', element: <NotFound /> },

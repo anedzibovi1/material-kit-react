@@ -22,25 +22,15 @@ const navConfig = [
     icon: getIcon('eva:shopping-bag-fill'),
   },
   {
-    title: 'blog',
-    path: '/dashboard/blog',
-    icon: getIcon('eva:file-text-fill'),
+    title: 'orders',
+    path: '/dashboard/orders',
+    icon: getIcon('ant-design:shopping-cart-outlined'),
   },
-  {
-    title: 'login',
-    path: '/login',
-    icon: getIcon('eva:lock-fill'),
-  },
-  {
-    title: 'register',
-    path: '/register',
-    icon: getIcon('eva:person-add-fill'),
-  },
-  {
-    title: 'Not found',
-    path: '/404',
-    icon: getIcon('eva:alert-triangle-fill'),
-  },
+  // {
+  //   title: 'wishlist',
+  //   path: '/dashboard/wishlist',
+  //   icon: getIcon('bi:box2-heart'),
+  // },
 ];
 
 export default navConfig;

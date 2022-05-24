@@ -1,11 +1,13 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
+
 // material
 import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormControlLabel } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
+import axios from '../../../http-common';
 import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
@@ -14,6 +16,8 @@ export default function LoginForm() {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const [emailData, setEmailData] = useState();
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
@@ -27,8 +31,8 @@ export default function LoginForm() {
       remember: true,
     },
     validationSchema: LoginSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: async () => {
+      navigate('/dashboard/products', { replace: true });
     },
   });
 
@@ -38,6 +42,9 @@ export default function LoginForm() {
     setShowPassword((show) => !show);
   };
 
+  useEffect(() => {
+    setEmailData(getFieldProps('email').value);
+  }, [getFieldProps]);
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>

@@ -1,7 +1,9 @@
+import { useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Card, Link, Container, Typography } from '@mui/material';
+import axios from '../http-common';
 // hooks
 import useResponsive from '../hooks/useResponsive';
 // components
@@ -61,6 +63,11 @@ export default function Login() {
 
   const mdUp = useResponsive('up', 'md');
 
+  useEffect(async () => {
+    const response = await axios.get('/artikal');
+    console.log('RES', response.data.data);
+  }, []);
+
   return (
     <Page title="Login">
       <RootStyle>
@@ -79,22 +86,17 @@ export default function Login() {
 
         {mdUp && (
           <SectionStyle>
-            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hi, Welcome Back
-            </Typography>
-            <img src="/static/illustrations/illustration_login.png" alt="login" />
+            <img src="/static/illustrations/login-image-illustration.jpeg" alt="login" />
           </SectionStyle>
         )}
 
         <Container maxWidth="sm">
           <ContentStyle>
             <Typography variant="h4" gutterBottom>
-              Sign in to Minimal
+              Sign in
             </Typography>
 
             <Typography sx={{ color: 'text.secondary', mb: 5 }}>Enter your details below.</Typography>
-
-            <AuthSocial />
 
             <LoginForm />
 

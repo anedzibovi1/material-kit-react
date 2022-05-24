@@ -1,8 +1,8 @@
 // ----------------------------------------------------------------------
 
 const account = {
-  displayName: 'Jaydon Frankie',
-  email: 'demo@minimals.cc',
+  displayName: 'Amila Nedzibovic',
+  email: 'anedzibovi1@etf.unsa.ba',
   photoURL: '/static/mock-images/avatars/avatar_default.jpg',
 };
 
