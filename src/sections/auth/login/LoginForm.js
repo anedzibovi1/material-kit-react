@@ -31,8 +31,16 @@ export default function LoginForm() {
       remember: true,
     },
     validationSchema: LoginSchema,
+    
     onSubmit: async () => {
-      navigate('/dashboard/products', { replace: true });
+      
+      const response = await axios.get('http://localhost:8180/korisnik/1');
+      console.log('RES', response.data.data);
+      // console.log(response.data.data.korisnik.email);
+      if(response.data.data.korisnik.email === getFieldProps('email').value && 
+         response.data.data.korisnik.password === getFieldProps('password').value) {
+        navigate('/dashboard/products', { replace: true });
+      }
     },
   });
 
