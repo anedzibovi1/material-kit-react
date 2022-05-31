@@ -1,7 +1,7 @@
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // material
 import {
   Card,
@@ -82,6 +82,17 @@ export default function Order() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const navigate = useNavigate();
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    if (localStorage.getItem('user') === null || JSON.parse(localStorage.getItem('user')).uloga === 1) {
+      navigate('/404', { replace: true });
+      navigate(0);
+    }
+    setUser(JSON.parse(localStorage.getItem('user')));
+  }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

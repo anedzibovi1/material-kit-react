@@ -1,3 +1,7 @@
+import { useState, useEffect } from 'react';
+
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+
 import { faker } from '@faker-js/faker';
 // @mui
 import { useTheme } from '@mui/material/styles';
@@ -23,6 +27,16 @@ import {
 export default function DashboardApp() {
   const theme = useTheme();
 
+  const navigate = useNavigate();
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    if (localStorage.getItem('user') === null || JSON.parse(localStorage.getItem('user')).uloga === 1) {
+      navigate('/404', { replace: true });
+      navigate(0);
+    }
+    setUser(JSON.parse(localStorage.getItem('user')));
+  }, []);
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">

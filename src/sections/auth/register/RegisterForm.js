@@ -32,7 +32,6 @@ export default function RegisterForm() {
     },
     validationSchema: RegisterSchema,
     onSubmit: async () => {
-      console.log('FORMIK: ', formik.values);
       try {
         const res = await axios.post('/korisnik', {
           firstName: formik.values.firstName,

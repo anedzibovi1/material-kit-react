@@ -144,15 +144,11 @@ export default function NavSection({ navConfig, ...other }) {
 
   const match = (path) => (path ? !!matchPath({ path, end: false }, pathname) : false);
 
-  console.log('STORAGE: ', JSON.parse(localStorage.getItem('user')));
-
   const user = JSON.parse(localStorage.getItem('user'));
   return (
     <Box {...other}>
       <List disablePadding sx={{ p: 1 }}>
         {navConfig.map((item) => {
-          console.log('item: ', item.title);
-          console.log('user uloga', user.uloga);
           if (user.uloga === 2 && item.title === 'wishlist') return null;
           if (user.uloga === 2 && item.title !== 'wishlist')
             return <NavItem key={item.title} item={item} active={match} />;

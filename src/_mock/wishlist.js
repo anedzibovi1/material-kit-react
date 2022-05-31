@@ -16,7 +16,7 @@ const PRODUCT_COLOR = ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', '#FF4842', '#
 
 // ----------------------------------------------------------------------
 
-const wishlist = [...Array(24)].map((_, index) => {
+const wishlist = [...Array(7)].map((_, index) => {
   const setIndex = index + 1;
 
   return {

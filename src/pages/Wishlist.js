@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+
 // material
 import { Container, Stack, Typography } from '@mui/material';
 // components
@@ -6,11 +8,13 @@ import Page from '../components/Page';
 import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
 // mock
 import WISHLIST from '../_mock/wishlist';
+import axios from '../http-common';
 
 // ----------------------------------------------------------------------
 
 export default function EcommerceShopWishlist() {
   const [openFilter, setOpenFilter] = useState(false);
+  const [artikli, setArtikli] = useState();
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -20,6 +24,26 @@ export default function EcommerceShopWishlist() {
     setOpenFilter(false);
   };
 
+  const navigate = useNavigate();
+  const [user, setUser] = useState({});
+
+  useEffect(async () => {
+    if (localStorage.getItem('user') === null || JSON.parse(localStorage.getItem('user')).uloga === 2) {
+      navigate('/404', { replace: true });
+      navigate(0);
+    }
+    setUser(JSON.parse(localStorage.getItem('user')));
+
+    try {
+      const response = await axios.get('/artikal');
+      console.log('response: ', response.data.data.artikli);
+      setArtikli(response.data.data.artikli);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
+  console.log('Artikli: ', artikli);
   return (
     <Page title="Dashboard: Products">
       <Container>
@@ -38,7 +62,7 @@ export default function EcommerceShopWishlist() {
           </Stack>
         </Stack>
 
-        <ProductList products={WISHLIST} />
+        <ProductList products={WISHLIST} artikli={artikli} />
         <ProductCartWidget />
       </Container>
     </Page>

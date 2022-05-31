@@ -49,7 +49,6 @@ export default function LoginForm() {
           response.data.data.korisnik.email === getFieldProps('email').value &&
           response.data.data.korisnik.password === getFieldProps('password').value
         ) {
-          console.log('RES: ', response.data.data.korisnik.email);
           setIsUserPresent(true);
           localStorage.setItem(
             'user',

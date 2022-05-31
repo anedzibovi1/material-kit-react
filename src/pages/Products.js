@@ -25,12 +25,9 @@ export default function EcommerceShop() {
 
   useEffect(() => {
     if (localStorage.getItem('user') === null) {
-      console.log('HIII');
       navigate('/404', { replace: true });
       navigate(0);
     }
-    console.log('local storage: ', JSON.parse(localStorage.getItem('user')).uloga);
-
     setUser(JSON.parse(localStorage.getItem('user')));
   }, []);
 

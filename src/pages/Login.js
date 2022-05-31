@@ -65,7 +65,6 @@ export default function Login() {
 
   useEffect(async () => {
     const response = await axios.get('/artikal');
-    console.log('RES', response.data.data);
   }, []);
 
   return (
