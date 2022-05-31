@@ -26,11 +26,11 @@ const navConfig = [
     path: '/dashboard/orders',
     icon: getIcon('ant-design:shopping-cart-outlined'),
   },
-  // {
-  //   title: 'wishlist',
-  //   path: '/dashboard/wishlist',
-  //   icon: getIcon('bi:box2-heart'),
-  // },
+  {
+    title: 'wishlist',
+    path: '/dashboard/wishlist',
+    icon: getIcon('bi:box2-heart'),
+  },
 ];
 
 export default navConfig;

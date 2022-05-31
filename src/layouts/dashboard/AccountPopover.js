@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@mui/material';
@@ -34,6 +34,9 @@ export default function AccountPopover() {
   const anchorRef = useRef(null);
 
   const [open, setOpen] = useState(null);
+  const [user, setUser] = useState({});
+
+  const navigate = useNavigate();
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -42,6 +45,18 @@ export default function AccountPopover() {
   const handleClose = () => {
     setOpen(null);
   };
+
+  const handleLogout = () => {
+    setOpen(null);
+    localStorage.clear();
+    navigate('/');
+  };
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem('user')));
+    if (localStorage.getItem('user') === null) {
+      navigate('404', { replace: true });
+    }
+  }, []);
 
   return (
     <>
@@ -82,10 +97,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {user.firstName} {user.lastName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {user.email}
           </Typography>
         </Box>
 
@@ -101,7 +116,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </MenuPopover>

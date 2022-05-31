@@ -7,6 +7,7 @@ import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
+import axios from '../../../http-common';
 
 // ----------------------------------------------------------------------
 
@@ -30,8 +31,30 @@ export default function RegisterForm() {
       password: '',
     },
     validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: async () => {
+      console.log('FORMIK: ', formik.values);
+      try {
+        const res = await axios.post('/korisnik', {
+          firstName: formik.values.firstName,
+          lastName: formik.values.lastName,
+          email: formik.values.email,
+          password: formik.values.password,
+          uloga: 1,
+        });
+        localStorage.setItem(
+          'user',
+          JSON.stringify({
+            email: res.data.data.korisnik.email,
+            firstName: res.data.data.korisnik.firstName,
+            lastName: res.data.data.korisnik.lastName,
+            password: res.data.data.korisnik.password,
+            uloga: res.data.data.korisnik.uloga,
+          })
+        );
+        navigate('/dashboard/products', { replace: true });
+      } catch (err) {
+        console.log(err);
+      }
     },
   });
 

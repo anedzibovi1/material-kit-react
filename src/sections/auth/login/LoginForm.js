@@ -6,6 +6,11 @@ import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormControlLabel } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+
+import Alert from '@mui/material/Alert';
+import Collapse from '@mui/material/Collapse';
+import CloseIcon from '@mui/icons-material/Close';
+
 // component
 import axios from '../../../http-common';
 import Iconify from '../../../components/Iconify';
@@ -19,6 +24,10 @@ export default function LoginForm() {
 
   const [emailData, setEmailData] = useState();
 
+  const [isUserPresent, setIsUserPresent] = useState(false);
+
+  const [open, setOpen] = useState(false);
+
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     password: Yup.string().required('Password is required'),
@@ -31,19 +40,35 @@ export default function LoginForm() {
       remember: true,
     },
     validationSchema: LoginSchema,
-    
+
     onSubmit: async () => {
-      
-      const response = await axios.get('http://localhost:8180/korisnik/1');
-      console.log('RES', response.data.data);
-      // console.log(response.data.data.korisnik.email);
-      if(response.data.data.korisnik.email === getFieldProps('email').value && 
-         response.data.data.korisnik.password === getFieldProps('password').value) {
-        navigate('/dashboard/products', { replace: true });
+      let response = null;
+      try {
+        response = await axios.get(`http://localhost:8180/korisnik/email/${emailData}`);
+        if (
+          response.data.data.korisnik.email === getFieldProps('email').value &&
+          response.data.data.korisnik.password === getFieldProps('password').value
+        ) {
+          console.log('RES: ', response.data.data.korisnik.email);
+          setIsUserPresent(true);
+          localStorage.setItem(
+            'user',
+            JSON.stringify({
+              email: response.data.data.korisnik.email,
+              firstName: response.data.data.korisnik.firstName,
+              lastName: response.data.data.korisnik.lastName,
+              password: response.data.data.korisnik.password,
+              uloga: response.data.data.korisnik.uloga,
+            })
+          );
+          navigate('/dashboard/products', { replace: true, state: { email: emailData } });
+        }
+      } catch (error) {
+        setIsUserPresent(false);
+        setOpen(true);
       }
     },
   });
-
 
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 
@@ -54,8 +79,36 @@ export default function LoginForm() {
   useEffect(() => {
     setEmailData(getFieldProps('email').value);
   }, [getFieldProps]);
+
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
+
   return (
     <FormikProvider value={formik}>
+      {!isUserPresent && (
+        <Collapse in={open}>
+          {' '}
+          <Alert
+            severity="error"
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setOpen(false);
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+            sx={{ mb: 2 }}
+          >
+            The username or password is incorrect!
+          </Alert>
+        </Collapse>
+      )}
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
           <TextField

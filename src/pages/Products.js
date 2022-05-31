@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 // material
 import { Container, Stack, Typography } from '@mui/material';
 // components
@@ -11,7 +13,8 @@ import PRODUCTS from '../_mock/products';
 
 export default function EcommerceShop() {
   const [openFilter, setOpenFilter] = useState(false);
-
+  const navigate = useNavigate();
+  const [user, setUser] = useState({});
   const handleOpenFilter = () => {
     setOpenFilter(true);
   };
@@ -19,6 +22,17 @@ export default function EcommerceShop() {
   const handleCloseFilter = () => {
     setOpenFilter(false);
   };
+
+  useEffect(() => {
+    if (localStorage.getItem('user') === null) {
+      console.log('HIII');
+      navigate('/404', { replace: true });
+      navigate(0);
+    }
+    console.log('local storage: ', JSON.parse(localStorage.getItem('user')).uloga);
+
+    setUser(JSON.parse(localStorage.getItem('user')));
+  }, []);
 
   return (
     <Page title="Dashboard: Products">
