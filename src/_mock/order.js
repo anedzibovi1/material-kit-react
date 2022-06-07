@@ -3,7 +3,7 @@ import { sample } from 'lodash';
 
 // ----------------------------------------------------------------------
 
-const orders = [...Array(24)].map((_, index) => ({
+const orders = [...Array(20)].map((_, index) => ({
   id: faker.datatype.uuid(),
   avatarUrl: `/static/mock-images/products/product_${index + 1}.jpg`,
   name: sample([
@@ -37,17 +37,17 @@ const orders = [...Array(24)].map((_, index) => ({
   inStock: faker.commerce.price(100, 200, 0),
   status: sample(['Shipped', 'Canceled', 'Bought', 'Arrived']),
   role: sample([
-    'Sneakers',
-    'Hoodies',
-    'Leggings',
-    'Shorts',
-    'Tracksuits',
-    'T-shirts',
-    'Socks',
-    'Sports Bras',
-    'Yoga sets',
-    'Gym clothes',
-    'Swimwear',
+    '1. Sneakers',
+    '2. Hoodies',
+    '3. Leggings',
+    '4. Shorts',
+    '5. Tracksuits',
+    '6. T-shirts',
+    '7. Socks',
+    '8. Sports Bras',
+    '9. Yoga sets',
+    '10. Gym clothes',
+    '11. Swimwear',
   ]),
 }));
 

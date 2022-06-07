@@ -27,6 +27,7 @@ import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
 import ORDERLIST from '../_mock/order';
+import axios from '../http-common';
 
 // ----------------------------------------------------------------------
 
@@ -85,15 +86,58 @@ export default function Order() {
 
   const navigate = useNavigate();
   const [user, setUser] = useState({});
+  const [artikal, setArtikal] = useState({});
+  const [noviArtikli, setNoviArtikli] = useState({});
 
   useEffect(() => {
     if (localStorage.getItem('user') === null || JSON.parse(localStorage.getItem('user')).uloga === 1) {
       navigate('/404', { replace: true });
       navigate(0);
     }
+
+    axios.get('/artikal').then((res) => {
+      setArtikal(res.data.data.artikli);
+    });
     setUser(JSON.parse(localStorage.getItem('user')));
   }, []);
 
+  useEffect(() => {
+    const roles = [
+      '1. Sneakers',
+      '2. Hoodies',
+      '3. Leggings',
+      '4. Shorts',
+      '5. Tracksuits',
+      '6. T-shirts',
+      '7. Socks',
+      '8. Sports Bras',
+      '9. Yoga sets',
+      '10. Gym clothes',
+      '11. Swimwear',
+    ];
+
+    if (Object.values(artikal).length > 0) {
+      const newOrders = ORDERLIST.map((order, i) => {
+        return {
+          id: artikal[i].id,
+          name: artikal[i].naziv,
+          role: roles.find((r) => {
+            return r.match(/\d/g).join('') === artikal[i].vrsta.toString();
+          }),
+          inStock: artikal[i].kolicina,
+          isVerified: order.isVerified,
+          status: order.status,
+          narudzba: artikal[i].narudzba,
+          kolicina: artikal[i].kolicina,
+          snizen: artikal[i].snizen,
+          brojProdanih: artikal[i].brojProdanih,
+          cijena: artikal[i].cijena,
+          avatarUrl: order.avatarUrl,
+        };
+      });
+      setNoviArtikli(newOrders);
+    }
+  }, [setArtikal, artikal]);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -121,6 +165,8 @@ export default function Order() {
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
     }
+
+    console.log('NEW SELECTED: ', newSelected);
     setSelected(newSelected);
   };
 
@@ -137,10 +183,16 @@ export default function Order() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - ORDERLIST.length) : 0;
+  console.log('ARTIKAL: ', artikal);
+  console.log('NOVI ARTIKAL: ', noviArtikli);
+  console.log('ORDER LIST: ', ORDERLIST);
 
-  const filteredUsers = applySortFilter(ORDERLIST, getComparator(order, orderBy), filterName);
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - noviArtikli.length) : 0;
 
+  let filteredUsers = applySortFilter(ORDERLIST, getComparator(order, orderBy), filterName);
+
+  if (Object.values(noviArtikli).length > 0)
+    filteredUsers = applySortFilter(noviArtikli, getComparator(order, orderBy), filterName);
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
@@ -165,7 +217,7 @@ export default function Order() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={ORDERLIST.length}
+                  rowCount={noviArtikli.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -195,7 +247,7 @@ export default function Order() {
                             </Typography>
                           </Stack>
                         </TableCell>
-                        <TableCell align="left">{role}</TableCell>
+                        <TableCell align="left">{role.substring(3)}</TableCell>
                         <TableCell align="left">{isVerified ? "Men's" : "Women's"}</TableCell>
                         <TableCell align="left">
                           <Label

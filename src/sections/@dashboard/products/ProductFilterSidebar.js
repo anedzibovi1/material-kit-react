@@ -28,7 +28,7 @@ export const SORT_BY_OPTIONS = [
   { value: 'priceDesc', label: 'Price: High-Low' },
   { value: 'priceAsc', label: 'Price: Low-High' },
 ];
-export const FILTER_GENDER_OPTIONS = ['Men', 'Women', 'Kids'];
+export const FILTER_GENDER_OPTIONS = ['Men', 'Women'];
 export const FILTER_CATEGORY_OPTIONS = ['All', 'Shose', 'Apparel', 'Accessories'];
 export const FILTER_RATING_OPTIONS = ['up4Star', 'up3Star', 'up2Star', 'up1Star'];
 export const FILTER_PRICE_OPTIONS = [
@@ -55,7 +55,14 @@ ShopFilterSidebar.propTypes = {
   onCloseFilter: PropTypes.func,
 };
 
-export default function ShopFilterSidebar({ isOpenFilter, onOpenFilter, onCloseFilter }) {
+export default function ShopFilterSidebar({
+  isOpenFilter,
+  onOpenFilter,
+  onCloseFilter,
+  values,
+  handlePriceFilter,
+  handleColorFilter,
+}) {
   return (
     <>
       <Button disableRipple color="inherit" endIcon={<Iconify icon="ic:round-filter-list" />} onClick={onOpenFilter}>
@@ -85,28 +92,6 @@ export default function ShopFilterSidebar({ isOpenFilter, onOpenFilter, onCloseF
           <Stack spacing={3} sx={{ p: 3 }}>
             <div>
               <Typography variant="subtitle1" gutterBottom>
-                Gender
-              </Typography>
-              <FormGroup>
-                {FILTER_GENDER_OPTIONS.map((item) => (
-                  <FormControlLabel key={item} control={<Checkbox />} label={item} />
-                ))}
-              </FormGroup>
-            </div>
-
-            <div>
-              <Typography variant="subtitle1" gutterBottom>
-                Category
-              </Typography>
-              <RadioGroup>
-                {FILTER_CATEGORY_OPTIONS.map((item) => (
-                  <FormControlLabel key={item} value={item} control={<Radio />} label={item} />
-                ))}
-              </RadioGroup>
-            </div>
-
-            <div>
-              <Typography variant="subtitle1" gutterBottom>
                 Colors
               </Typography>
               <ColorManyPicker
@@ -114,6 +99,8 @@ export default function ShopFilterSidebar({ isOpenFilter, onOpenFilter, onCloseF
                 colors={FILTER_COLOR_OPTIONS}
                 // onChange={handleChange}
                 // onChecked={(color) => values.colors.includes(color)}
+                onChange={handleColorFilter}
+                onChecked={(color) => {}}
                 sx={{ maxWidth: 38 * 4 }}
               />
             </div>
@@ -124,38 +111,11 @@ export default function ShopFilterSidebar({ isOpenFilter, onOpenFilter, onCloseF
               </Typography>
               <RadioGroup>
                 {FILTER_PRICE_OPTIONS.map((item) => (
-                  <FormControlLabel key={item.value} value={item.value} control={<Radio />} label={item.label} />
-                ))}
-              </RadioGroup>
-            </div>
-
-            <div>
-              <Typography variant="subtitle1" gutterBottom>
-                Rating
-              </Typography>
-              <RadioGroup>
-                {FILTER_RATING_OPTIONS.map((item, index) => (
                   <FormControlLabel
-                    key={item}
-                    value={item}
-                    control={
-                      <Radio
-                        disableRipple
-                        color="default"
-                        icon={<Rating readOnly value={4 - index} />}
-                        checkedIcon={<Rating readOnly value={4 - index} />}
-                      />
-                    }
-                    label="& Up"
-                    sx={{
-                      my: 0.5,
-                      borderRadius: 1,
-                      '& > :first-of-type': { py: 0.5 },
-                      '&:hover': {
-                        opacity: 0.48,
-                        '& > *': { bgcolor: 'transparent' },
-                      },
-                    }}
+                    key={item.value}
+                    value={item.value}
+                    control={<Radio onChange={handlePriceFilter} />}
+                    label={item.label}
                   />
                 ))}
               </RadioGroup>
@@ -170,7 +130,7 @@ export default function ShopFilterSidebar({ isOpenFilter, onOpenFilter, onCloseF
             type="submit"
             color="inherit"
             variant="outlined"
-            startIcon={<Iconify icon="ic:round-clear-all" />}
+            startIcon={<Iconify icon="ic:round-clear-all" onClick />}
           >
             Clear All
           </Button>

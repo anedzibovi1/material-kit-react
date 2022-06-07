@@ -11,12 +11,19 @@ const PRODUCT_NAME = [
   'NikeCourt Royale',
   'Nike React Art3mis',
   'Nike React Infinity Run Flyknit A.I.R. Chaz Bear',
+  'Nike Air Max 270 React ENG',
+  'NikeCourt Royale',
+  'Nike Air Zoom Pegasus 37 Premium',
+  'Nike Air Zoom SuperRep',
+  'NikeCourt Royale',
+  'Nike React Art3mis',
+  'Nike React Infinity Run Flyknit A.I.R. Chaz Bear',
 ];
 const PRODUCT_COLOR = ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', '#FF4842', '#1890FF', '#94D82D', '#FFC107'];
 
 // ----------------------------------------------------------------------
 
-const wishlist = [...Array(7)].map((_, index) => {
+const wishlist = [...Array(14)].map((_, index) => {
   const setIndex = index + 1;
 
   return {

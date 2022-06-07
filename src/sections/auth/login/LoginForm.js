@@ -58,11 +58,13 @@ export default function LoginForm() {
               lastName: response.data.data.korisnik.lastName,
               password: response.data.data.korisnik.password,
               uloga: response.data.data.korisnik.uloga,
+              narudzba_id: response.data.data.korisnik.narudzba?.id,
             })
           );
           navigate('/dashboard/products', { replace: true, state: { email: emailData } });
         }
       } catch (error) {
+        console.log('ERROR: ', error);
         setIsUserPresent(false);
         setOpen(true);
       }

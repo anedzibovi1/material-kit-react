@@ -22,6 +22,9 @@ import {
   AppConversionRates,
 } from '../sections/@dashboard/app';
 
+import WISHLIST from '../_mock/wishlist';
+import axios from '../http-common';
+
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
@@ -29,12 +32,23 @@ export default function DashboardApp() {
 
   const navigate = useNavigate();
   const [user, setUser] = useState({});
+  const [artikal, setArtikal] = useState({});
 
-  useEffect(() => {
+  useEffect(async () => {
     if (localStorage.getItem('user') === null || JSON.parse(localStorage.getItem('user')).uloga === 1) {
       navigate('/404', { replace: true });
       navigate(0);
     }
+    const response = await (await axios.get('/artikal')).data.data.artikli;
+    const ordersNew = response.filter((res) => {
+      return (
+        JSON.parse(localStorage.getItem(`newOrders#${res.id}`)).narudzba?.id ===
+        JSON.parse(localStorage.getItem('user')).narudzba_id
+      );
+    });
+
+    setArtikal(ordersNew);
+    console.log('ARTIKAL', ordersNew);
     setUser(JSON.parse(localStorage.getItem('user')));
   }, []);
   return (
@@ -124,15 +138,18 @@ export default function DashboardApp() {
               title="Order Timeline"
               list={[...Array(5)].map((_, index) => ({
                 id: faker.datatype.uuid(),
-                title: [
-                  '100 orders, $4220 in total',
-                  'Item #A-1234 Shipped',
-                  'Item #N-1234 Shipped',
-                  'New order placed #XF-2356',
-                  'New order placed #XF-2346',
-                ][index],
+                title:
+                  Object.values(artikal).length > 0
+                    ? artikal[index].naziv
+                    : [
+                        '100 orders, $4220 in total',
+                        'Item #A-1234 Shipped',
+                        'Item #N-1234 Shipped',
+                        'New order placed #XF-2356',
+                        'New order placed #XF-2346',
+                      ][index],
                 type: `order${index + 1}`,
-                time: faker.date.past(0),
+                time: faker.date.between('2022-06-07', '2022-0607'),
               }))}
             />
           </Grid>
